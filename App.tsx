@@ -98,6 +98,10 @@ export default function App() {
     return <ApiKeyModal onSelectKey={handleSelectKey} />;
   }
 
+  const isProcessing = status === AppStatus.FETCHING_REPO || 
+                       status === AppStatus.ANALYZING_ARCH || 
+                       status === AppStatus.GENERATING_IMAGE;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50 flex flex-col">
       {/* Header */}
@@ -163,7 +167,7 @@ export default function App() {
                   className="flex-grow p-3 outline-none text-gray-700 font-medium bg-transparent"
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && status === AppStatus.IDLE && handleAnalyze()}
+                  onKeyDown={(e) => e.key === 'Enter' && !isProcessing && handleAnalyze()}
                 />
               </div>
             ) : (
@@ -179,14 +183,14 @@ export default function App() {
             
             <button 
               onClick={handleAnalyze}
-              disabled={status !== AppStatus.IDLE}
+              disabled={isProcessing}
               className={`mx-2 mb-2 py-3 rounded-lg font-semibold text-white transition-all transform active:scale-95 ${
-                status !== AppStatus.IDLE 
+                isProcessing 
                 ? 'bg-gray-400 cursor-not-allowed' 
                 : 'bg-indigo-600 hover:bg-indigo-700 shadow-lg hover:shadow-indigo-500/30'
               }`}
             >
-              {status === AppStatus.IDLE ? 'Visualize' : 'Working...'}
+              {isProcessing ? 'Working...' : 'Visualize'}
             </button>
           </div>
         </div>
