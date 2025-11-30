@@ -113,12 +113,12 @@ export default function App() {
             </span>
           </h2>
           <p className="text-lg text-gray-600">
-            Paste a GitHub repository URL. We'll read the <code className="bg-gray-100 px-1 py-0.5 rounded text-gray-800 text-sm">llms.txt</code> or README, deduce the architecture, and draw a whiteboard diagram instantly.
+            Paste a GitHub repository URL. We'll read the codebase, deduce the architecture, and draw a whiteboard diagram instantly.
           </p>
         </div>
 
         {/* Input Section */}
-        <div className="w-full max-w-2xl relative group">
+        <div className="w-full max-w-2xl relative group mb-8">
           <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
           <div className="relative bg-white rounded-xl shadow-xl p-2 flex items-center gap-2 border border-gray-100">
             <div className="pl-4 text-gray-400">
@@ -145,6 +145,27 @@ export default function App() {
             </button>
           </div>
         </div>
+
+        {/* How It Works Section */}
+        {status === AppStatus.IDLE && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl w-full text-left animate-fade-in">
+            <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+              <div className="bg-indigo-100 w-10 h-10 rounded-full flex items-center justify-center text-indigo-600 font-bold mb-3 text-lg">1</div>
+              <h3 className="font-semibold text-gray-900 mb-2">Scan Repository</h3>
+              <p className="text-sm text-gray-600 leading-relaxed">We fetch the <code className="bg-gray-100 px-1 py-0.5 rounded text-gray-800 text-xs font-mono">llms.txt</code> or README to understand your project's structure.</p>
+            </div>
+            <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+               <div className="bg-indigo-100 w-10 h-10 rounded-full flex items-center justify-center text-indigo-600 font-bold mb-3 text-lg">2</div>
+              <h3 className="font-semibold text-gray-900 mb-2">Analyze Logic</h3>
+              <p className="text-sm text-gray-600 leading-relaxed">Gemini Flash identifies key modules, data flows, and infrastructure components.</p>
+            </div>
+             <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+               <div className="bg-indigo-100 w-10 h-10 rounded-full flex items-center justify-center text-indigo-600 font-bold mb-3 text-lg">3</div>
+              <h3 className="font-semibold text-gray-900 mb-2">Draw Diagram</h3>
+              <p className="text-sm text-gray-600 leading-relaxed">Gemini 3 Pro Vision creates a hand-drawn style whiteboard diagram of the workflow.</p>
+            </div>
+          </div>
+        )}
 
         {/* Progress Indicator */}
         <StepIndicator status={status} />
