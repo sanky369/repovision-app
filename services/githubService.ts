@@ -18,40 +18,42 @@ export const fetchRepoContext = async (repoUrl: string): Promise<{ name: string;
     const baseUrl = `https://raw.githubusercontent.com/${user}/${repo}`;
     const branch = 'main'; // simplifying assumption, could try 'master' as fallback
 
+    let fetchedContext = "";
+
     // Try fetching llms.txt first (standard for AI context)
     try {
       const llmsRes = await fetch(`${baseUrl}/${branch}/llms.txt`);
       if (llmsRes.ok) {
         const text = await llmsRes.text();
-        return { name: repoName, context: text.substring(0, 15000) }; // Limit context size
+        fetchedContext = text.substring(0, 15000); // Limit context size
       }
     } catch (e) {
       console.warn("llms.txt fetch failed", e);
     }
 
-    // Fallback to README.md
-    try {
-      const readmeRes = await fetch(`${baseUrl}/${branch}/README.md`);
-      if (readmeRes.ok) {
-        const text = await readmeRes.text();
-        return { name: repoName, context: text.substring(0, 15000) };
+    // Fallback to README.md if llms.txt failed
+    if (!fetchedContext) {
+      try {
+        const readmeRes = await fetch(`${baseUrl}/${branch}/README.md`);
+        if (readmeRes.ok) {
+          const text = await readmeRes.text();
+          fetchedContext = text.substring(0, 15000);
+        }
+      } catch (e) {
+        console.warn("README.md fetch failed", e);
       }
-    } catch (e) {
-      console.warn("README.md fetch failed", e);
     }
 
-    // Fallback if nothing is fetched (e.g. CORS or Private)
-    // We return just the name so Gemini can "hallucinate" a plausible architecture
-    return { 
-      name: repoName, 
-      context: `The user provided the repository ${repoName} but the contents could not be fetched directly. 
-      Please assume a standard architecture based on the repository name and common patterns for this type of tool.` 
-    };
+    if (!fetchedContext) {
+      throw new Error("Could not access repository content. If this is a private repository, please use the 'Manual Input' tab to paste your documentation.");
+    }
 
-  } catch (error) {
-    return {
-      name: "Unknown Repo",
-      context: "Could not parse repository. Please generate a generic software architecture diagram."
-    };
+    return { name: repoName, context: fetchedContext };
+
+  } catch (error: any) {
+    if (error.message.includes("Manual Input")) {
+      throw error;
+    }
+    throw new Error("Could not parse repository. Please check the URL or try pasting the context manually.");
   }
 };

@@ -1,9 +1,6 @@
-# RepoVision
+# RepoVision Architect
 
-**RepoVision** is a React-based web application that transforms GitHub repository documentation into beautiful, hand-drawn style architecture diagrams using Google's Gemini generative AI models.
-
-<img width="1171" height="755" alt="image" src="https://github.com/user-attachments/assets/25896fb1-9aa2-42c8-a641-2b2abaf93e5b" />
-
+**RepoVision Architect** is a React-based web application that transforms GitHub repository documentation into beautiful, hand-drawn style architecture diagrams using Google's Gemini generative AI models.
 
 ## 🚀 How It Works
 
