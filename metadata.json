@@ -1,0 +1,5 @@
+{
+  "name": "RepoVision Architect",
+  "description": "Visualizes GitHub repository architectures as hand-drawn whiteboard diagrams using Gemini Pro Vision.",
+  "requestFramePermissions": []
+}
